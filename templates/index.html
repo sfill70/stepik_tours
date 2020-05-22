@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stepik Travel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container mt-3">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" data-test="logo" href="{% url 'tours:home' %}">Stepik Travel</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav" data-test="navigation">
+                <li class="nav-item">
+                    {% url 'tours:departure' 'msk' as departure %}
+                    <a class="nav-link {% if departure == request.path %} active {% endif %}"
+                       href={% url 'tours:departure' 'msk' %} data-test="navlink">Из Москвы </a>
+                </li>
+                <li class="nav-item">
+                    {% url 'tours:departure' 'spb' as departure %}
+                    <a class="nav-link {% if departure == request.path %} active {% endif %}"
+                       href={% url 'tours:departure' 'spb' %} data-test="navlink">Из Петербурга</a>
+                </li>
+                <li class="nav-item">
+                    {% url 'tours:departure' 'nsk' as departure %}
+                    <a class="nav-link {% if departure == request.path %} active {% endif %}"
+                       href={% url 'tours:departure' 'nsk' %} data-test="navlink">Из Новосибирска</a>
+                </li>
+                <li class="nav-item">
+                    {% url 'tours:departure' 'ekb' as departure %}
+                    <a class="nav-link {% if departure == request.path %} active {% endif %}"
+                       href={% url 'tours:departure' 'ekb' %} data-test="navlink">Из Екатеринбурга</a>
+                </li>
+                <li class="nav-item">
+                    {% url 'tours:departure' 'kazan' as departure %}
+                    <a class="nav-link {% if departure == request.path %} active {% endif %}"
+                       href={% url 'tours:departure' 'kazan' %} data-test="navlink">Из Казани</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    {% block content %}
+        <div class="jumbotron text-center mt-4">
+            <h1 class="display-4">Всякие туры</h1>
+            <p class="lead">Для тех, кого отвлекают дома</p>
+            <p class="mt-5 w-50 mx-auto">Лучшие направления,где никто не будет вам мешать сидеть на берегу и изучать
+                программирование, дизайн, разработку игр и управление продуктами</p>
+        </div>
+
+
+        {#        {{ tours.keys }}#}
+
+
+        <!-- CARDS -->
+
+        <div class="row mt-5" data-test="cards">
+            {% for key, value in tours.items %}
+                {#            {{ value.departure }}#}
+                <div class="col-4" data-test="card">
+                    <div class="card mb-3">
+                        <img src="{{ value.picture }}"
+                             style=" float: left; margin-right: 10px; margin-bottom: 10px; width: 100%; height: 200px; overflow: hidden;"
+                             class="card-img-top img-fluid" data-test="picture" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ value.title }}</h5>
+                            <p class="card-text">{{ value.description|truncatechars:150 }}</p>
+                            <a href="{% url 'tours:tour' key %}" class="btn btn-sm btn-primary" data-test="tourlink">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    {% endblock %}
+
+</div>
+
+</body>
+</html>
