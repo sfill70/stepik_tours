@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 import random
 
 
+
 # Create your views here.
 
 def get_town(departure):
@@ -22,12 +23,11 @@ def get_town(departure):
     return town
 
 
-# def custom_handler404(request, exception=None):
-#     return HttpResponseNotFound('Ой, что то сломалось... !')
-#
-#
-# def custom_handler500(request, exception=None):
-#     return HttpResponseNotFound('Ой, что то сломалось... !')
+def custom_handler404(request, exception=None):
+    return HttpResponseNotFound('Ой, что то сломалось... !')
+
+
+
 
 
 class MainView(View):
@@ -37,7 +37,6 @@ class MainView(View):
     def get(self, request, *args, **kwargs):
         tours = {i: data.tours[i] for i in
                  random.sample(range(1, len(data.tours)), 6)}
-
         context = {
             'tours': tours,
         }
@@ -49,8 +48,9 @@ class DepartureView(View):
     def get(self, request, departure, *args, **kwargs):
 
         set_departure = {value.get('departure') for (key, value) in data.tours.items()}
-        # if departure not in set_departure:
-        #     return HttpResponseNotFound('Ой, что то сломалось... !')
+        if departure not in set_departure:
+            # raise Http404
+            return custom_handler404(request)
 
         tours = {key: value for (key, value) in data.tours.items()
                  if value['departure'] == departure}
@@ -76,7 +76,10 @@ class DepartureView(View):
             'max_price': max_price,
             'min_nights': min_nights,
             'max_nights': max_nights,
-            'count_tours': count_tours
+            'count_tours': count_tours,
+            
+
+
         }
 
         return render(request, 'departure.html', context)
@@ -84,15 +87,14 @@ class DepartureView(View):
 
 class TourView(View):
     def get(self, request, id):
-        # if id not in data.tours:
-        #     return HttpResponseNotFound('Ой, что то сломалось... !')
+        if id not in data.tours:
+            return custom_handler404(request)
 
 
         tour = data.tours[id]
         departure = data.tours[id]["departure"]
 
         town = get_town(departure)
-
 
         context = {'tour': tour,
                    'departure': departure,
