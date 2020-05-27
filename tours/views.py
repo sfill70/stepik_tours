@@ -32,12 +32,12 @@ def custom_handler500(request, exception=None):
 
 class MainView(View):
 
-    # paginate_by = 6
+
 
     def get(self, request, *args, **kwargs):
         tours = {i: data.tours[i] for i in
                  random.sample(range(1, len(data.tours)), 6)}
-        # tours = data.tours
+
         context = {
             'tours': tours,
         }
@@ -50,8 +50,7 @@ class DepartureView(View):
 
         set_departure = {value.get('departure') for (key, value) in data.tours.items()}
         if departure not in set_departure:
-            # raise Http404
-            return custom_handler404(request)
+            return HttpResponseNotFound('Ой, что то сломалось... !')
 
         tours = {key: value for (key, value) in data.tours.items()
                  if value['departure'] == departure}
@@ -87,17 +86,14 @@ class TourView(View):
     def get(self, request, id):
         if id not in data.tours:
             return HttpResponseNotFound('Ой, что то сломалось... !')
-            # raise Http404
-            # custom_handler404(request)
-            # custom_handler500(request)
+
 
         tour = data.tours[id]
         departure = data.tours[id]["departure"]
 
         town = get_town(departure)
 
-        print(town)
-
+      
         context = {'tour': tour,
                    'departure': departure,
                    'town': town}
