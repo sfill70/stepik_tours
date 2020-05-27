@@ -16,10 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-from . views import custom_handler404, custom_handler500
-
-handler404 = custom_handler404
-handler500 = custom_handler500
+# from . views import custom_handler404, custom_handler500
+#
+# handler404 = custom_handler404
+# handler500 = custom_handler500
 app_name = 'tours'
 
 urlpatterns = [

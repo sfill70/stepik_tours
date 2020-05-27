@@ -22,12 +22,12 @@ def get_town(departure):
     return town
 
 
-def custom_handler404(request, exception=None):
-    return HttpResponseNotFound('Ой, что то сломалось... !')
-
-
-def custom_handler500(request, exception=None):
-    return HttpResponseNotFound('Ой, что то сломалось... !')
+# def custom_handler404(request, exception=None):
+#     return HttpResponseNotFound('Ой, что то сломалось... !')
+#
+#
+# def custom_handler500(request, exception=None):
+#     return HttpResponseNotFound('Ой, что то сломалось... !')
 
 
 class MainView(View):
@@ -49,8 +49,8 @@ class DepartureView(View):
     def get(self, request, departure, *args, **kwargs):
 
         set_departure = {value.get('departure') for (key, value) in data.tours.items()}
-        if departure not in set_departure:
-            return HttpResponseNotFound('Ой, что то сломалось... !')
+        # if departure not in set_departure:
+        #     return HttpResponseNotFound('Ой, что то сломалось... !')
 
         tours = {key: value for (key, value) in data.tours.items()
                  if value['departure'] == departure}
@@ -84,8 +84,8 @@ class DepartureView(View):
 
 class TourView(View):
     def get(self, request, id):
-        if id not in data.tours:
-            return HttpResponseNotFound('Ой, что то сломалось... !')
+        # if id not in data.tours:
+        #     return HttpResponseNotFound('Ой, что то сломалось... !')
 
 
         tour = data.tours[id]
@@ -93,7 +93,7 @@ class TourView(View):
 
         town = get_town(departure)
 
-      
+
         context = {'tour': tour,
                    'departure': departure,
                    'town': town}
